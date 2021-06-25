@@ -7,20 +7,17 @@ import subprocess
 import os
 import platform
 
+from util import Config
 
-def train(dirname: str, self: str, opp: str, self_char: str, opp_char: str, episode: int = 100) -> None:
+
+def train(config: Config) -> None:
     """学習を実行する
 
     Args:
-        dirname (str): 実行環境のパス
-        self (str): 自分のAI名
-        opp (str): 相手のAI名
-        self_char (str): 自分のキャラ
-        opp_char (str): 相手のキャラ
-        episode (int, optional): 学習回数. デフォルトは100.
+        config (Config): 学習設定
     """
 
-    os.chdir(dirname)
+    os.chdir(config.env_dir)
     if platform.system() == 'Windows':
         cmd = "java -cp FightingICE.jar;./lib/lwjgl/*;./lib/natives/windows/*;./lib/*  Main --py4j --mute --port 4242"
     else:
@@ -28,15 +25,18 @@ def train(dirname: str, self: str, opp: str, self_char: str, opp_char: str, epis
     proc = subprocess.Popen(cmd)
 
     print("学習を開始します.")
-    print("試合数は{}です.".format(episode))
-    print("味方のAIは{}, キャラは{}です.".format(self, self_char))
-    print("敵のAIは{}, キャラは{}です.".format(opp, opp_char))
+    print("試合数は{}です.".format(config.episode))
+    print("味方のAIは{}, キャラは{}です.".format(
+        config.self_player_name, config.self_player_char))
+    print("敵のAIは{}, キャラは{}です.".format(
+        config.opp_player_name, config.opp_player_char))
 
     gateway: JavaGateway = initialize()
 
-    for i in range(episode):
+    for i in range(config.episode):
         print("######### {}試合目 ###########".format(i+1))
-        run_game(gateway, self, opp, self_char, opp_char)
+        run_game(gateway, config.self_player_name, config.opp_player_name,
+                 config.self_player_char, config.opp_player_char)
         time.sleep(5)
         sys.stdout.flush()
 
@@ -89,4 +89,5 @@ def run_game(gateway: JavaGateway, self: str, opp: str, self_char: str, opp_char
 
 
 if __name__ == "__main__":
-    train("env", "ERHEA_PI", "MctsAi", "ZEN", "ZEN", 2)
+    config = Config()
+    train(config)
