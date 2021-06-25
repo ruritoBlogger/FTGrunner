@@ -23,6 +23,10 @@ class Config:
     # 試行回数
     episode: int
 
+    # 評価を行う際の試行回数
+    # 各エピソードをこの変数回分試してみて平均値などを計算するイメージ
+    evaluate_num: int
+
     def __init__(self) -> None:
 
         if not os.path.exists(".env"):
@@ -38,4 +42,6 @@ class Config:
         self.self_player_char = os.getenv("SELF_PLAYER_CHAR")
         self.opp_player_char = os.getenv("OPP_PLAYER_CHAR")
 
-        self.episode = (int)(os.getenv("EPISODE"))
+        self.episode = int(os.getenv("EPISODE"))
+
+        self.evaluate_num = int(os.getenv("EVALUATE_NUM"))
