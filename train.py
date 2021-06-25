@@ -9,6 +9,16 @@ import platform
 
 
 def train(dirname: str, self: str, opp: str, self_char: str, opp_char: str, episode: int = 100) -> None:
+    """学習を実行する
+
+    Args:
+        dirname (str): 実行環境のパス
+        self (str): 自分のAI名
+        opp (str): 相手のAI名
+        self_char (str): 自分のキャラ
+        opp_char (str): 相手のキャラ
+        episode (int, optional): 学習回数. デフォルトは100.
+    """
 
     os.chdir(dirname)
     if platform.system() == 'Windows':
