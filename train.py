@@ -20,6 +20,9 @@ def train(config: Config) -> None:
     os.chdir(config.env_dir)
     if platform.system() == 'Windows':
         cmd = "java -cp FightingICE.jar;./lib/lwjgl/*;./lib/natives/windows/*;./lib/*  Main --py4j --mute --port 4242"
+    elif platform.system() == 'Darwin':
+        cmd = ["java", "-XstartOnFirstThread", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/macos/*:./lib/*",
+               "Main", "--py4j", "--mute", "--port", "4242"]
     else:
         cmd = "java -cp FightingICE.jar;./lib/lwjgl/*;./lib/natives/linux/*;./lib/*  Main --py4j --mute --port 4242"
     proc = subprocess.Popen(cmd)
