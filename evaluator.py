@@ -2,10 +2,9 @@ from typing import List
 import shutil
 import os
 import csv
-import time
 
 from util import *
-from train import train
+from game_executor import GameExecutor
 
 
 def evaluate_agent(config: Config) -> None:
@@ -20,20 +19,21 @@ def evaluate_agent(config: Config) -> None:
     result = List[List[float]]
 
     log_dir: str = config.env_dir + "/log/point"
-    output_dir: str = "/log/"
+    output_dir: str = "log/"
 
     shutil.rmtree(log_dir)
     os.mkdir(log_dir)
 
+    trainer = GameExecutor(config)
+    # FIXME: ここでディレクトリ移動したくない
+    os.chdir(config.env_dir)
+
     for key in range(config.evaluate_num):
 
-        print("{}回目の学習です".format(key+1))
-
-        train(config)
-        print("evaluator 学習終了")
-        time.sleep(10)
+        trainer.reset()
+        trainer.train()
         episode_result: List[float] = get_result(
-            config.env_dir + "/log/point/")
+            log_dir)
         result.append(episode_result)
 
         shutil.rmtree(log_dir)

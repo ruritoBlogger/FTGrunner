@@ -31,3 +31,9 @@ def get_result(dir_path: str) -> List[float]:
         result.append(win/(win+lose))
 
     return result
+
+
+if __name__ == "__main__":
+    import os
+    os.chdir("env")
+    print(get_result("log/point/"))
