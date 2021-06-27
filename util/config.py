@@ -27,6 +27,10 @@ class Config:
     # 各エピソードをこの変数回分試してみて平均値などを計算するイメージ
     evaluate_num: int
 
+    # slackのwebhook
+    slack_result_webhook: str
+    slack_log_webhook: str
+
     def __init__(self) -> None:
 
         if not os.path.exists(".env"):
@@ -45,3 +49,6 @@ class Config:
         self.episode = int(os.getenv("EPISODE"))
 
         self.evaluate_num = int(os.getenv("EVALUATE_NUM"))
+
+        self.slack_result_webhook = os.getenv("SLACK_API_RESULT_WEBHOOK_URL")
+        self.slack_log_webhook = os.getenv("SLACK_API_LOG_WEBHOOK_URL")
