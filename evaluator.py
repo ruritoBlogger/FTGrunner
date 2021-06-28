@@ -16,17 +16,19 @@ def evaluate_agent(config: Config) -> None:
         config (Config): 評価や学習に用いる設定
     """
 
-    result = List[List[float]]
+    result: List[List[float]] = []
 
-    log_dir: str = config.env_dir + "/log/point"
+    log_dir: str = "log/point/"
     output_dir: str = "log/"
+
+    # FIXME: ここでディレクトリ移動したくない
+    os.chdir(config.env_dir)
 
     shutil.rmtree(log_dir)
     os.mkdir(log_dir)
+    # TODO: 学習したモデルの情報を削除しておく
 
     trainer = GameExecutor(config)
-    # FIXME: ここでディレクトリ移動したくない
-    os.chdir(config.env_dir)
 
     for key in range(config.evaluate_num):
 
@@ -34,14 +36,19 @@ def evaluate_agent(config: Config) -> None:
         trainer.train()
         episode_result: List[float] = get_result(
             log_dir)
+        print(episode_result)
         result.append(episode_result)
 
         shutil.rmtree(log_dir)
         os.mkdir(log_dir)
 
+        # TODO: 学習したモデルの情報のバックアップを作成しておく
+        # TODO: また、学習したモデルの情報を削除しておく
+
     # TODO: 対戦相手や実行時間などをファイル名に含める
     # TODO: 書き込み部分は分離させたい
-    with open(output_dir + 'log.csv') as f:
+    os.chdir("../")
+    with open(output_dir + 'log.csv', mode='w', newline="") as f:
         writer = csv.writer(f)
         for episode_result in result:
             writer.writerow(episode_result)
