@@ -1,6 +1,6 @@
 from slack_sdk.webhook import WebhookClient
 
-from config import Config
+from .config import Config
 
 
 def send_message(config: Config, msg: str, is_logged: bool) -> None:

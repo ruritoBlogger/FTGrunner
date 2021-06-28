@@ -29,9 +29,12 @@ def evaluate_agent(config: Config) -> None:
     # TODO: 学習したモデルの情報を削除しておく
 
     trainer = GameExecutor(config)
+    send_message(
+        config, "評価を開始します.\n 味方は{}, 敵は{}, 味方のキャラは{}, 敵のキャラは{}.\n エピソード数は{}で各エピソードを{}回評価します".format(config.self_player_name, config.opp_player_name, config.self_player_char, config.opp_player_char, config.episode, config.evaluate_num), False)
 
     for key in range(config.evaluate_num):
 
+        send_message(config, "{}回目の評価を行います.".format(key+1), False)
         trainer.reset()
         trainer.train()
         episode_result: List[float] = get_result(

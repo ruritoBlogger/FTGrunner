@@ -5,7 +5,7 @@ import time
 from typing import Any
 from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters, JavaObject, get_field
 
-from util import Config
+from util import Config, send_message
 
 
 class GameExecutor:
@@ -87,6 +87,8 @@ class GameExecutor:
 
         while not cnt - self.__exit_cnt >= self.__config.episode:
             cnt += 1
+            send_message(self.__config, "{}回目の学習を行います.".format(
+                cnt - self.__exit_cnt), True)
             self.__start_game()
             try:
                 self.__close_game()
