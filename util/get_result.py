@@ -1,6 +1,8 @@
 import glob
 import csv
 from typing import List
+import pandas as pd
+from pandas.core.frame import DataFrame
 
 
 def get_result(dir_path: str) -> List[float]:
@@ -33,5 +35,28 @@ def get_result(dir_path: str) -> List[float]:
     return result
 
 
+def get_evaluate_result(dir_path: str) -> DataFrame:
+    """評価データを取得する
+    評価データはcsvで保存されている
+
+    Args:
+        dir_path (str): 評価データのパス
+
+    Returns:
+        DataFrame: 評価データ
+    """
+
+    csv_file = open(dir_path, "r")
+    csv_data = csv.reader(csv_file, delimiter=",", doublequote=True,
+                          lineterminator="\r\n", quotechar='"', skipinitialspace=True)
+    episode_len = 0
+    for data in csv_data:
+        evaluate_len += 1
+
+    df = pd.read_csv(dir_path, header=None, names=range(evaluate_len))
+    return df
+
+
 if __name__ == "__main__":
-    print(get_result("env/log/point/"))
+    # print(get_result("env/log/point/"))
+    print(get_evaluate_result("log/log.csv"))
