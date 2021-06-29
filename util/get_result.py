@@ -46,14 +46,8 @@ def get_evaluate_result(dir_path: str) -> DataFrame:
         DataFrame: 評価データ
     """
 
-    csv_file = open(dir_path, "r")
-    csv_data = csv.reader(csv_file, delimiter=",", doublequote=True,
-                          lineterminator="\r\n", quotechar='"', skipinitialspace=True)
-    episode_len = 0
-    for data in csv_data:
-        evaluate_len += 1
-
-    df = pd.read_csv(dir_path, header=None, names=range(evaluate_len))
+    df: DataFrame = pd.read_csv(dir_path, header=None)
+    df = df.transpose().rename(columns={0: "data"})
     return df
 
 

@@ -1,10 +1,6 @@
 from typing import List
 import matplotlib.pyplot as plt
-import pandas as pd
 from pandas.core.frame import DataFrame
-import seaborn as sns
-
-from .get_result import get_result, get_evaluate_result
 
 
 def create_graph(output_file: str, dirname: str = "env") -> None:
@@ -31,15 +27,21 @@ def create_evaluate_graph(output_file: str, dirname: str) -> None:
 
     result: DataFrame = get_evaluate_result(dirname)
 
-    x: List[int] = list(range(len(ave_result)))
+    x = range(len(result["data"]))
 
-    deviation: List[float] = []
+    y = result["data"]
+    y_mean = result["data"].rolling(3).mean()
+    y_std = result["data"].rolling(3).std()
 
-    fig = plt.figure()
-    plt.plot(x, ave_result)
-    plt.fill_between(x, )
+    plt.plot(x, y)
+    plt.fill_between(x, y_mean - y_std, y_mean + y_std)
+    plt.show()
 
 
 if __name__ == "__main__":
-    create_graph("result.png")
-    create_evaluate_graph("log/log.csv")
+    from get_result import get_result, get_evaluate_result
+    # create_graph("result.png")
+    create_evaluate_graph("result.png", "log/log.csv")
+
+else:
+    from .get_result import get_result, get_evaluate_result
