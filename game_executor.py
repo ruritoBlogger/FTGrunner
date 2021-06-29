@@ -31,16 +31,17 @@ class GameExecutor:
         subprocessを用いてJava側を起動する
         また, 実行環境によって起動方法が異なる
         """
+        # TODO: 設定から画面表示を切り替えられるようにしておく
 
         if platform.system() == 'Windows':
             cmd = ["java", "-cp", "FightingICE.jar;./lib/lwjgl/*;./lib/natives/windows/*;./lib/*",
-                   "Main", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         elif platform.system() == 'Darwin':
             cmd = ["java", "-XstartOnFirstThread", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/macos/*:./lib/*",
-                   "Main", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         else:
             cmd = ["java", "-cp", "FightingICE.jar;./lib/lwjgl/*;./lib/natives/linux/*;./lib/*",
-                   "Main", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         self.__java_process = subprocess.Popen(cmd)
 
         time.sleep(3)
