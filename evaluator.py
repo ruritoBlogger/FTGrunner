@@ -48,6 +48,7 @@ def evaluate_agent(config: Config) -> None:
         # TODO: 学習したモデルの情報のバックアップを作成しておく
         # TODO: また、学習したモデルの情報を削除しておく
 
+    # TODO: 学習が終了したという内容を通知する
     # TODO: 対戦相手や実行時間などをファイル名に含める
     # TODO: 書き込み部分は分離させたい
     os.chdir("../")
