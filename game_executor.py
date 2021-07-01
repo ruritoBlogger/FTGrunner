@@ -40,7 +40,7 @@ class GameExecutor:
             cmd = ["java", "-XstartOnFirstThread", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/macos/*:./lib/*",
                    "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         else:
-            cmd = ["java", "-cp", "FightingICE.jar;./lib/lwjgl/*;./lib/natives/linux/*;./lib/*",
+            cmd = ["java", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/linux/*:./lib/*",
                    "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         self.__java_process = subprocess.Popen(cmd)
 
