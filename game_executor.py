@@ -35,13 +35,13 @@ class GameExecutor:
 
         if platform.system() == 'Windows':
             cmd = ["java", "-cp", "FightingICE.jar;./lib/lwjgl/*;./lib/natives/windows/*;./lib/*",
-                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         elif platform.system() == 'Darwin':
             cmd = ["java", "-XstartOnFirstThread", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/macos/*:./lib/*",
-                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         else:
             cmd = ["java", "-cp", "FightingICE.jar:./lib/lwjgl/*:./lib/natives/linux/*:./lib/*",
-                   "Main", "--fastmode", "--disable-window", "--py4j", "--mute", "--port", "4242"]
+                   "Main", "--disable-window", "--py4j", "--mute", "--port", "4242"]
         self.__java_process = subprocess.Popen(cmd)
 
         time.sleep(3)
