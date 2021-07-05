@@ -47,7 +47,7 @@ def get_evaluate_result(dir_path: str) -> DataFrame:
     """
 
     df: DataFrame = pd.read_csv(dir_path, header=None)
-    df = df.transpose().rename(columns={0: "data"})
+    df = df.transpose()
     return df
 
 

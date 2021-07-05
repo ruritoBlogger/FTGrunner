@@ -1,6 +1,7 @@
 from typing import List
 import matplotlib.pyplot as plt
 from pandas.core.frame import DataFrame
+import numpy as np
 
 
 def create_graph(output_file: str, dirname: str = "env") -> None:
@@ -27,15 +28,36 @@ def create_evaluate_graph(output_file: str, dirname: str) -> None:
 
     result: DataFrame = get_evaluate_result(dirname)
 
-    x = range(len(result["data"]))
+    x = range(len(result.columns))
 
-    y = result["data"]
-    y_mean = result["data"].rolling(3).mean()
-    y_std = result["data"].rolling(3).std()
+    y: List[float] = [0.0] * len(result.columns)
+    y_mean: List[float] = [0.0] * len(result.columns)
+    y_std: List[float] = [0.0] * len(result.columns)
 
-    plt.plot(x, y)
-    plt.fill_between(x, y_mean - y_std, y_mean + y_std)
-    plt.show()
+    # 各試合の平均や分散を計算する
+    for i in range(len(result.columns)):
+        # TODO: 最適なパラメータを設定する
+        # NOTE: rolling(n)は直近n回分から平均などを計算する
+        n = 3
+        episode_mean = result[i].mean()
+        episode_std = result[i].std()
+
+        y_mean[i] = episode_mean
+        y_std[i] = episode_std
+
+    # TODO: ログのファイル名からタイトルなどを決定する
+    our_AI = "ERHEA_PI"
+    opp_AI = "MctsAi"
+
+    plt.plot(x, y_mean, color="0.3")
+    y_mean = np.array(y_mean)
+    y_std = np.array(y_std)
+    plt.fill_between(x, y_mean - y_std, y_mean + y_std, color="0.7")
+    plt.title("the result of learning with {} vs {}".format(our_AI, opp_AI))
+    plt.xlabel("episode")
+    plt.ylabel("win rate")
+    # plt.show()
+    plt.savefig("result.png")
 
 
 if __name__ == "__main__":
