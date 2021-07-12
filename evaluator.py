@@ -2,6 +2,7 @@ from typing import List
 import shutil
 import os
 import csv
+import datetime
 
 from util import *
 from game_executor import GameExecutor
@@ -49,10 +50,12 @@ def evaluate_agent(config: Config) -> None:
         # TODO: また、学習したモデルの情報を削除しておく
 
     # TODO: 学習が終了したという内容を通知する
-    # TODO: 対戦相手や実行時間などをファイル名に含める
     # TODO: 書き込み部分は分離させたい
     os.chdir("../")
-    with open(output_dir + 'log.csv', mode='w', newline="") as f:
+    dt_now = datetime.datetime.now()
+    file_name: str = config.self_player_char + "_" + \
+        config.opp_player_name + "_" + dt_now.strftime("%m%d") + ".csv"
+    with open(output_dir + file_name, mode='w', newline="") as f:
         writer = csv.writer(f)
         for episode_result in result:
             writer.writerow(episode_result)
