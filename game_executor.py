@@ -4,6 +4,7 @@ from subprocess import Popen
 import time
 from typing import Any
 from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters, JavaObject, get_field
+from py4j.protocol import Py4JError
 
 from util import Config, send_message
 
@@ -55,16 +56,22 @@ class GameExecutor:
         """
 
         # TODO: envから設定出来るようにしておく
-        port = 4242
-        self.__gateway = JavaGateway(gateway_parameters=GatewayParameters(
-            port=port), callback_server_parameters=CallbackServerParameters(port=0))
-        real_callback_port = self.__gateway.get_callback_server().get_listening_port()
-        self.__gateway.java_gateway_server.resetCallbackClient(
-            self.__gateway.java_gateway_server.getCallbackClient().getAddress(), real_callback_port)
+        # FIXME: きたない
 
-        manager = self.__gateway.entry_point
-        game = manager.createGame(self.__config.self_player_char, self.__config.opp_player_char,
-                                  self.__config.self_player_name, self.__config.opp_player_name, 1)
+        try:
+            port = 4242
+            self.__gateway = JavaGateway(gateway_parameters=GatewayParameters(
+                port=port), callback_server_parameters=CallbackServerParameters(port=0))
+            real_callback_port = self.__gateway.get_callback_server().get_listening_port()
+            self.__gateway.java_gateway_server.resetCallbackClient(
+                self.__gateway.java_gateway_server.getCallbackClient().getAddress(), real_callback_port)
+
+            manager = self.__gateway.entry_point
+            game = manager.createGame(self.__config.self_player_char, self.__config.opp_player_char,
+                                    self.__config.self_player_name, self.__config.opp_player_name, 1)
+        except Py4JError:
+            # 実行に失敗した時はもう一度実行させる
+            self.__start_game()
 
         try:
             manager.runGame(game)
