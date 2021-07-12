@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 import os
 
+from util import DotenvKeyNotFoundError
+
 
 class Config:
     """学習設定を管理する
@@ -38,17 +40,40 @@ class Config:
 
         load_dotenv()
 
-        self.env_dir = os.getenv("ENV_DIR")
+        self.env_dir = self.get_param_from_env("ENV_DIR")
 
-        self.self_player_name = os.getenv("SELF_PLAYER_NAME")
-        self.opp_player_name = os.getenv("OPP_PLAYER_NAME")
+        self.self_player_name = self.get_param_from_env("SELF_PLAYER_NAME")
+        self.opp_player_name = self.get_param_from_env("OPP_PLAYER_NAME")
 
-        self.self_player_char = os.getenv("SELF_PLAYER_CHAR")
-        self.opp_player_char = os.getenv("OPP_PLAYER_CHAR")
+        self.self_player_char = self.get_param_from_env("SELF_PLAYER_CHAR")
+        self.opp_player_char = self.get_param_from_env("OPP_PLAYER_CHAR")
 
-        self.episode = int(os.getenv("EPISODE"))
+        self.episode = int(self.get_param_from_env("EPISODE"))
 
-        self.evaluate_num = int(os.getenv("EVALUATE_NUM"))
+        self.evaluate_num = int(self.get_param_from_env("EVALUATE_NUM"))
 
-        self.slack_result_webhook = os.getenv("SLACK_API_RESULT_WEBHOOK_URL")
-        self.slack_log_webhook = os.getenv("SLACK_API_LOG_WEBHOOK_URL")
+        self.slack_result_webhook = self.get_param_from_env(
+            "SLACK_API_RESULT_WEBHOOK_URL")
+        self.slack_log_webhook = self.get_param_from_env(
+            "SLACK_API_LOG_WEBHOOK_URL")
+
+    @staticmethod
+    def get_param_from_env(key: str) -> str:
+        """.envファイルから情報を抽出する
+
+        Args:
+            key (str): 抽出したい.envのキー
+
+        Raises:
+
+        Returns:
+            str: 抽出した情報
+        """
+
+        param = os.getenv(key)
+
+        if param is None:
+            raise DotenvKeyNotFoundError(
+                ".envファイルに[{}]に対する値が設定されていません".format(key))
+        else:
+            return param
