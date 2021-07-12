@@ -3,8 +3,8 @@ import subprocess
 from subprocess import Popen
 import time
 from typing import Any
-from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters, JavaObject, get_field
-from py4j.protocol import Py4JError
+from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters  # type:ignore
+from py4j.protocol import Py4JError  # type: ignore
 
 from util import Config, send_message
 
@@ -14,7 +14,7 @@ class GameExecutor:
     """
 
     __gateway: Any
-    __java_process: Popen
+    __java_process: Popen[bytes]
 
     __config: Config
     __exit_cnt: int
@@ -68,13 +68,13 @@ class GameExecutor:
 
             manager = self.__gateway.entry_point
             game = manager.createGame(self.__config.self_player_char, self.__config.opp_player_char,
-                                    self.__config.self_player_name, self.__config.opp_player_name, 1)
+                                      self.__config.self_player_name, self.__config.opp_player_name, 1)
         except Py4JError:
             # 実行に失敗した時はもう一度実行させる
             self.__start_game()
 
         try:
-            manager.runGame(game)
+            manager.runGame(game)  # type: ignore
         except:
             # FIXME: 失敗したという内容は握り潰したくない
             self.__exit_cnt += 1
