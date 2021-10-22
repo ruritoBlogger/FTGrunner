@@ -1,6 +1,5 @@
 import platform
 import subprocess
-from subprocess import Popen
 import time
 from typing import Any
 from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters  # type:ignore
@@ -14,7 +13,7 @@ class GameExecutor:
     """
 
     __gateway: Any
-    __java_process: Popen[bytes]
+    __java_process: Any
 
     __config: Config
     __exit_cnt: int
@@ -80,9 +79,12 @@ class GameExecutor:
             self.__exit_cnt += 1
 
     def __close_game(self) -> None:
-        self.__gateway.close_callback_server()
-        self.__gateway.close()
-        del self.__gateway
+        try:
+            self.__gateway.close_callback_server()
+            self.__gateway.close()
+            del self.__gateway
+        except:
+            pass
 
     def __close_java_process(self) -> None:
         self.__java_process.kill()
