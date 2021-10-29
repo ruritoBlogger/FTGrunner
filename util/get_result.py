@@ -72,6 +72,35 @@ def get_result_with_round_rate(dir_path: str) -> List[Tuple[int, int, int, int]]
     return result
 
 
+def get_win_rate(dir_path: str) -> Tuple[float, float, float, float]:
+    """自作した勝率ログから勝率を求める
+
+    Args:
+        dir_path (str): ログの場所
+
+    Returns:
+        Tuple[float, float, float, float]: 勝率(1Rの勝率, 2Rの勝率, 3Rの勝率, 試合の勝率)
+    """
+    csv_file = open(dir_path, "r")
+    csv_data = csv.reader(csv_file, delimiter=",", doublequote=True,
+                          lineterminator="\r\n", quotechar='"', skipinitialspace=True)
+
+    one_round_win_num = 0
+    second_round_win_num = 0
+    third_round_win_num = 0
+    total_round_win_num = 0
+    num = 0
+
+    for data in csv_data:
+        num += 1
+        one_round_win_num += 1 if data[0] == "1" else 0
+        second_round_win_num += 1 if data[1] == "1" else 0
+        third_round_win_num += 1 if data[2] == "1" else 0
+        total_round_win_num += 1 if data[3] == "1" else 0
+
+    return (one_round_win_num / num, second_round_win_num / num, third_round_win_num / num, total_round_win_num / num)
+
+
 def get_evaluate_result(dir_path: str) -> DataFrame:
     """評価データを取得する
     評価データはcsvで保存されている

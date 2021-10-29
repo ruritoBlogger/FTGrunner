@@ -4,6 +4,13 @@ from pandas.core.frame import DataFrame
 import numpy as np
 
 
+def create_win_rate(dirname: str) -> None:
+    """勝率のログから計算し表示する
+    """
+    result: List[float] = get_win_rate(dirname)
+    print(result)
+
+
 def create_graph(output_file: str, dirname: str = "env") -> None:
     """学習結果をグラフにする
     試合のログから試合の勝率を取得してグラフにする
@@ -18,12 +25,11 @@ def create_graph(output_file: str, dirname: str = "env") -> None:
     plt.savefig(output_file)
 
 
-def create_evaluate_graph(output_file: str, dirname: str) -> None:
+def create_evaluate_graph(dirname: str) -> None:
     """AIの評価結果をグラフにする
 
     Args:
-        output_file (str): グラフの保存先
-        dirname (str, optional): logの保存先.
+        dirname (str): logの保存先.
     """
 
     result: DataFrame = get_evaluate_result(dirname)
@@ -61,9 +67,10 @@ def create_evaluate_graph(output_file: str, dirname: str) -> None:
 
 
 if __name__ == "__main__":
-    from get_result import get_result, get_evaluate_result
+    from get_result import get_result, get_evaluate_result, get_win_rate
     # create_graph("result.png")
-    create_evaluate_graph("result.png", "log/log.csv")
+    # create_evaluate_graph("result.png", "log/log.csv")
+    create_win_rate("log/winrate.csv")
 
 else:
-    from .get_result import get_result, get_evaluate_result
+    from .get_result import get_result, get_evaluate_result, get_win_rate

@@ -50,10 +50,13 @@ def calc_win_rate(config: Config) -> None:
         os.chdir("../FTGrunner")
         with open(output_dir + file_name, mode='a', newline="") as f:
             writer = csv.writer(f)
+            result_len = len(result)
+            win_num = 0
             for episode_result in result:
-                send_message(config, "debug: episode_result: {}".format(
-                    episode_result), False)
                 writer.writerow(episode_result)
+                win_num += 1 if episode_result[3] == 1 else 0
+            send_message(config, "debug: 勝率: {}".format(
+                win_num / result_len), False)
         os.chdir(config.env_dir)
 
         # ログの削除
