@@ -3,6 +3,7 @@ import csv
 from typing import List, Tuple
 import pandas as pd
 from pandas.core.frame import DataFrame
+import numpy as np
 
 
 def get_result(dir_path: str) -> List[float]:
@@ -101,6 +102,26 @@ def get_win_rate(dir_path: str) -> Tuple[float, float, float, float]:
     return (one_round_win_num / num, second_round_win_num / num, third_round_win_num / num, total_round_win_num / num)
 
 
+def convert_csv_file(target_file: str, output_file: str) -> None:
+    """p1とp2が逆になっているログファイルを整形する
+    具体的には勝敗データを反転させる
+
+    Args:
+        target_file (str): コンバートしたいログファイル
+        output_file (str): コンバート後のログファイル
+    """
+    csv_file = open(target_file, "r")
+    csv_data = csv.reader(csv_file, delimiter=",", doublequote=True,
+                          lineterminator="\r\n", quotechar='"', skipinitialspace=True)
+
+    with open(output_file, mode='a', newline="") as f:
+        writer = csv.writer(f)
+
+        for data in csv_data:
+            data = [int(x) for x in data]
+            writer.writerow((-np.array(data)).tolist())
+
+
 def get_evaluate_result(dir_path: str) -> DataFrame:
     """評価データを取得する
     評価データはcsvで保存されている
@@ -120,4 +141,5 @@ def get_evaluate_result(dir_path: str) -> DataFrame:
 if __name__ == "__main__":
     # print(get_result("env/log/point/"))
     # print(get_evaluate_result("log/log.csv"))
-    print(get_result_with_round_rate("FTG4.50/log/point/"))
+    # print(get_result_with_round_rate("FTG4.50/log/point/"))
+    print(convert_csv_file("log/winrate.csv", "log/winrate_ERHEA_3_step.csv"))
